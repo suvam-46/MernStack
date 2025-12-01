@@ -64,7 +64,7 @@ app.get("/blogs", async (req, res) => {
     const blogs = await Blog.find();
 
     if (blogs.length == 0) {
-        req.json({
+        res.json({
             status: 404,
             message: "Empty Blog",
         });
@@ -100,8 +100,30 @@ app.get("/blogs/:id", async(req,res)=>{
     //}
 }
 )
+app.delete("/blogs/:id",async(req,res)=>{
+    ///logic
+    const id= req.params.id;
+    await Blog.findByIdAndDelete(id);
+    res.json({
+        status:200,
+        message:"Blog Deleted Successfully",
+    })
+})
 
-
+app.patch("/blogs/:id",async(req,res)=>{
+    const id = req.params.id;
+    const {title, subtitle, description} = req.body;
+    const blog=await Blog.findByIdAndUpdate(id,{
+        title:title,
+        subtitle:  subtitle,
+        description: description
+    });
+    res.json({
+        status:200,
+        message:"Blog Updated Successfully",
+        data:blog,
+    });
+});
 
 
 
